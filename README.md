@@ -1,5 +1,16 @@
 项目介绍： 本项目是一个学校后台管理系统   完整包含用户登陆、注册、以及登陆成功后的管理员管理、学院管理、学生管理、账号管理、任务管理、订单管理、数据统计、文件上传和导员管理页面
 
+项目展示：
+
+登陆页面：![image](https://github.com/user-attachments/assets/34960b73-bb25-4c03-9b02-28bb15703726) 
+
+功能页面：![image](https://github.com/user-attachments/assets/2087279e-da3f-4d6e-b8b1-8fccf5757205)
+
+数据展示：![image](https://github.com/user-attachments/assets/876b7955-a403-4530-a8b3-40a322caf95e)
+
+
+
+
 主要功能囊括了各项增删改查以及文件上传和数据图标展示，内部多为modelform形式的表单提交与验证，也有ajax方式的用户交互。
 
 使用方式  ：
