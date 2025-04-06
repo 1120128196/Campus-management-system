@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'plungins/bootstrap-3.4.1/css/bootstrap.min.css' %}">
+
+    <style>
+        .c1 {
+            width: 500px;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 5px 5px 5px #aaa;
+            padding: 10px 15px;
+
+            margin-top: 100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .c1 .text {
+            text-align: center;
+        }
+
+        /* 调整验证码容器 */
+        .captcha-container {
+            display: flex; /* 使用 flex 布局 */
+            align-items: center; /* 垂直居中 */
+            gap: 10px; /* 输入框和图片间距 */
+        }
+
+        /* 调整输入框 */
+        .captcha-container input[type="text"] {
+            width: 150px !important; /* 输入框宽度 */
+            flex-shrink: 0; /* 防止输入框被压缩 */
+            order: 1; /* 输入框放在左边 */
+        }
+
+        /* 调整图片 */
+        .captcha-container img {
+            height: 40px; /* 图片高度 */
+            border-radius: 4px; /* 圆角 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影 */
+            cursor: pointer; /* 鼠标指针 */
+            order: 2; /* 图片放在右边 */
+        }
+    </style>
+</head>
+<body>
+<div class="c1">
+    <h1 class="text">用户注册</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>用户名</label>
+            {{ form.un }}
+            <span style="color: red">{{ form.un.errors.0 }}</span>
+        </div>
+        <div class="form-group">
+            <label>密码</label>
+            {{ form.pwd }}
+            <span style="color: red">{{ form.pwd.errors.0 }}</span>
+        </div>
+        <!-- 验证码部分 -->
+        <div class="mb-3">
+            <label class="form-label" for="id_captcha">验证码</label>
+            <div class="captcha-container">  <!-- 容器 -->
+                {{ form.cap }}  <!-- 渲染整个 captcha 字段 -->
+            </div>
+            <span class="text-danger">{{ form.cap.errors.0 }}</span>
+        </div>
+        <input type="submit" value="保 存" class="btn btn-primary ">
+        <a href="/projectlogin/" class="btn btn-info">返 回</a>
+    </form>
+</div>
+{#刷新验证码的脚本，放到body部分的最后面即可#}
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plungins/bootstrap-3.4.1/js/bootstrap.js' %}"></script>
+<script>
+    $('.captcha').click(function () {
+        $.getJSON("/captcha/refresh/",
+            function (result) {
+                $('.captcha').attr('src', result['image_url']);
+                $('#id_captcha_0').val(result['key'])
+            });
+    });
+</script>
+</body>
+</html>

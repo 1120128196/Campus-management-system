@@ -1,0 +1,179 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        {#    注意 使用的不是form提交而是ajax提交 看button就能分辩#}
+        <div class="panel panel-default">
+            <div class="panel-heading">表单</div>
+            <div class="panel-body">
+                <form id="formAdd">
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label>{{ field.label }}</label>
+                            {#由于modelform会自动生成input标签<input type="text" class="form-control"  placeholder="姓名" name="user">#}
+                            {{ field }}
+                            <span class="error-msg" style="color:red;"></span>
+                        </div>
+                    {% endfor %}
+                    <button id="btnAdd" type="button" class="btn btn-primary">提 交</button>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                任务列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>级别</th>
+                    <th>负责人</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th>{{ obj.id }}</th>
+                        <td>{{ obj.title }}</td>
+                        <td>{{ obj.get_level_display }}</td>
+                        <td>{{ obj.user.username }}</td>
+                        <td>
+                            <a href="" class="btn-primary btn btn-xs">编辑</a>
+                            <a href="" class="btn-danger btn btn-xs">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        {#        <div><h1>Ajax学习</h1>#}
+        {#        ajax初识#}
+        {#        <h3>实例1</h3>#}
+        {#        <input id="btn1" type="button" class="btn btn-primary" value="点击1">#}
+        {#          ajax获取前端信息传递到后端#}
+        {#        <h3>实例2</h3>#}
+        {#        <input type="text" id="txtUser" placeholder="姓名">#}
+        {#        <input type="text" id="txtAge" placeholder="年龄">#}
+        {#        <input id="btn2" type="button" class="btn btn-primary" value="点击2">#}
+        {#          通过form的形势更简便 注意id改为name  此时ajax接受数据也简化了#}
+        {#        <h3>实例3</h3>#}
+        {#        <form id="form3">#}
+        {#            <input type="text" name="user" placeholder="姓名">#}
+        {#            <input type="text" name="age" placeholder="年龄">#}
+        {#            <input type="text" name="email" placeholder="邮箱">#}
+        {#            <input type="text" name="more" placeholder="介绍">#}
+        {#        </form>#}
+        {#        <input id="btn3" type="button" class="btn btn-primary" value="点击3">#}
+        {#        </div>#}
+        <ul class="pagination">
+            {{ page_string }}
+            <li>
+                <form method="get" style="float: left;margin-left: -1px">
+                    <div class="input-group" style="width: 200px">
+                        <input type="text" class="form-control" placeholder="页码" name="page">
+                        <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">跳转</button>
+            </span>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            {#    页面框架加载完成后自动执行#}
+            bindBtn1Event();
+            bindBtn2Event();
+            bindBtn3Event();
+            bindBtnAddEvent();
+        })
+
+        function bindBtn1Event() {
+            $('#btn1').click(function () {
+                $.ajax({
+                    url: '/task/ajax/',
+                    type: 'post',
+                    data: {
+                        n1: 123,
+                        n2: 456
+                    },
+                    dataType: 'JSON',
+                    success: function (res) {
+                        console.log(res);
+                        console.log(res.data);
+                    }
+                })
+            })
+        }
+
+        function bindBtn2Event() {
+            $('#btn2').click(function () {
+                $.ajax({
+                    url: '/task/ajax/',
+                    type: 'post',
+                    data: {
+                        name: $('#txtUser').val(),
+                        age: $('#txtAge').val()
+                    },
+                    dataType: 'JSON',
+                    success: function (res) {
+                        console.log(res);
+                        console.log(res.data);
+                    }
+                })
+            })
+        }
+
+        function bindBtn3Event() {
+            $('#btn3').click(function () {
+                $.ajax({
+                    url: '/task/ajax/',
+                    type: 'post',
+                    data: $('#form3').serialize(),
+                    dataType: 'JSON',
+                    success: function (res) {
+                        console.log(res);
+                        console.log(res.data);
+                    }
+                })
+            })
+        }
+
+        function bindBtnAddEvent() {
+            $('#btnAdd').click(function () {
+                $('.error-msg').empty();
+
+                $.ajax({
+                    url: '/task/add/',
+                    type: 'post',
+                    data: $('#formAdd').serialize(),
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.status) {
+                            alert('添加成功')
+                            {#    js实现页面刷新#}
+                            location.reload()
+                        } else {
+                            $.each(res.error, function (name, data) {
+                                {#console.log(name,data);#}
+                                $('#id_' + name).next().text(data[0])
+                            })
+                        }
+                    }
+                })
+            })
+        }
+    </script>
+{% endblock %}

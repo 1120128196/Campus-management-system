@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{# 使用了模板的基础 layout模板#}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">修改学院</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>标题</label>
+                            <input type="text" class="form-control"  placeholder="标题" name="title" value="{{ row_object.title }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">提 交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

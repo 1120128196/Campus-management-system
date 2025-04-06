@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-top: 10px">
+            <a href="/manage/add/" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建导员
+            </a>
+            <div style="float: right;width: 300px">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search" value={{ search_data }}>
+                        <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"
+                                                                        aria-hidden="true"></span></button>
+                    </span>
+                    </div><!-- /input-group -->
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                导员列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>Logo</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in query_set %}
+                    <tr>
+                        <th>{{ obj.id }}</th>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.count }}</td>
+                        <td>
+                            <img src="/media/{{ obj.img }}" alt="" style="height: 80px">
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

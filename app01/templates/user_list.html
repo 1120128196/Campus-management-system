@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-top: 10px">
+            <a href="/user/add/" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建学生信息
+            </a>
+            <a href="/user/model/form/add/" class="btn btn-success">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建学生信息 采用ModelForm
+            </a>
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                学生列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>姓名</th>
+                    <th>密码</th>
+                    <th>年龄</th>
+                    <th>余额</th>
+                    <th>入学时间</th>
+                    <th>性别</th>
+                    <th>所属学院</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th>{{ obj.id }}</th>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.password }}</td>
+                        <td>{{ obj.age }}</td>
+                        <td>{{ obj.account }}</td>
+                        <td>{{ obj.create_time|date:'Y-m-d' }}</td>
+                        <td>{{ obj.get_gender_display }}</td>
+                        <td>{{ obj.depart.title }}</td>
+                        <td>
+                            <a href="/user/{{ obj.id }}/edit/" class="btn-primary btn btn-xs">编辑</a>
+                            <a href="/user/{{ obj.id }}/delete/" class="btn-danger btn btn-xs">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <ul class="pagination">
+            {{ page_string }}
+            <li>
+                <form method="get" style="float: left;margin-left: -1px">
+                    <div class="input-group" style="width: 200px">
+                        <input type="text" class="form-control" placeholder="页码" name="page">
+                        <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">跳转</button>
+            </span>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
